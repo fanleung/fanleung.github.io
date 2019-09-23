@@ -83,7 +83,7 @@ keywords: "Jekyll, NexT"
 # Set rss to false to disable feed link.
 # Leave rss as empty to use site's feed link.
 # Set rss to specific value if you have burned your feed already.
-rss:
+rss: false
 
 # Specify the date when the site was setup
 #since: 2015
@@ -379,9 +379,13 @@ han: false
 
 # Disqus
 disqus:
-  enable: false
+  enable: true
   shortname:
   count: true
+
+reward_comment: 坚持原创技术分享，您的支持将鼓励我继续创作！
+wechatpay: "http://ww1.sinaimg.cn/large/7e61971fgy1g79ljdu5llj205u05agm4.jpg"
+alipay: "http://ww1.sinaimg.cn/large/7e61971fgy1g79lljcuygj20840800u6.jpg"
 
 # Hypercomments
 #hypercomments_id:
