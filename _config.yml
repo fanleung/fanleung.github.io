@@ -74,6 +74,7 @@ gems:
 # Site Information Settings
 # ---------------------------------------------------------------
 
+# 浏览器网页图标
 # Put your favicon.ico into `assets/` directory.
 favicon: /assets/favicon.ico
 
@@ -250,7 +251,7 @@ toc:
 # Creative Commons 4.0 International License.
 # http://creativecommons.org/
 # Available: by | by-nc | by-nc-nd | by-nc-sa | by-nd | by-sa | zero
-creative_commons: by-sa
+# creative_commons: by-sa
 #creative_commons:
 
 
@@ -490,14 +491,20 @@ valine_comment:
   enable: true
   leancloud_appid: 8t0RzmS6J6rI60h1JDAeXeCa-gzGzoHsz
   leancloud_appkey: im5ytKGJxe5XwDy7CLj6CYIx
+  notify: false 
+  verify: false
   placeholder: "来都来了，不撩一句嘛~，留言记得留下【邮箱】，方便收到回复通知~"
-  comment_count: false
+  avatar: mm 
+  guest_info: nick,mail,link 
+  pageSize: 10 
+  visitor: true 
+  comment_count: true
 
 
 # Show number of visitors to each article.
 # You can visit https://leancloud.cn get AppID and AppKey.
 leancloud_visitors:
-  enable: true
+  enable: false
   app_id: 8t0RzmS6J6rI60h1JDAeXeCa-gzGzoHsz
   app_key: im5ytKGJxe5XwDy7CLj6CYIx
 
