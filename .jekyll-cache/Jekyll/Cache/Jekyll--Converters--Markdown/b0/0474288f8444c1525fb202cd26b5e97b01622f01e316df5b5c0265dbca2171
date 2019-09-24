@@ -1,0 +1,14 @@
+I"y<p><img src="http://ww1.sinaimg.cn/large/7e61971fgy1g79ljdu5llj205u05agm4.jpg" alt="wechat.jpg" /></p>
+
+<p><img src="http://ww1.sinaimg.cn/large/7e61971fgy1g79lljcuygj20840800u6.jpg" alt="alipay.png" /></p>
+
+<p>//代码高亮及行数</p>
+
+<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="k">def</span> <span class="nf">foo</span>
+  <span class="nb">puts</span> <span class="s1">'foo'</span>
+<span class="k">end</span>
+</pre></td></tr></tbody></table></code></pre></figure>
+:ET

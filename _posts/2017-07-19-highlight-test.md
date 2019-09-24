@@ -43,6 +43,7 @@ def foo
 end
 {% endhighlight %}
 
+
 ```c++
 #include <iostream>
 

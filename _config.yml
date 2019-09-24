@@ -4,7 +4,7 @@
 # ---------------------------------------------------------------
 
 # Site
-title: blog
+title: Fanleung's blog
 subtitle:
 description: nothing...
 author: Fanleung
@@ -121,7 +121,7 @@ menu:
   #about: /about/
   archives: /archives/
   tags: /tags/
-  #sitemap: /sitemap.xml
+  # sitemap: /sitemap.xml
   #commonweal: /404.html
 
 
@@ -372,7 +372,7 @@ han: false
 #swiftype_key:
 
 # Baidu Analytics ID  站点统计
-# baidu_analytics:87c290a085d2b8ca80e434c2c4f88d3b
+baidu_analytics: 87c290a085d2b8ca80e434c2c4f88d3b
 
 # Duoshuo ShortName
 #duoshuo_shortname:
@@ -383,7 +383,7 @@ disqus:
   shortname:
   count: true
 
-reward_comment: 坚持原创技术分享，您的支持将鼓励我继续创作！
+reward_comment: 创作不易，如果本篇文章能帮到您，您可以扫描下面二维码打赏，也不用太多，够买一杯咖啡就行，您的支持将鼓励我继续创作！
 wechatpay: "http://ww1.sinaimg.cn/large/7e61971fgy1g79ljdu5llj205u05agm4.jpg"
 alipay: "http://ww1.sinaimg.cn/large/7e61971fgy1g79lljcuygj20840800u6.jpg"
 
