@@ -92,7 +92,8 @@ rss: false
 authoricon: heart
 
 # Footer `powered-by` and `theme-info` copyright
-copyright: true
+# 底下显示 powered-by 和 主题 由来
+copyright: false
 
 # ---------------------------------------------------------------
 # SEO Settings
@@ -489,8 +490,8 @@ rating:
 # You can visit https://leancloud.cn get AppID and AppKey.
 leancloud_visitors:
   enable: false
-  app_id: #<app_id>
-  app_key: #<app_key>
+  app_id: 8t0RzmS6J6rI60h1JDAeXeCa-gzGzoHsz
+  app_key: im5ytKGJxe5XwDy7CLj6CYIx
 
 # Show PV/UV of the website/page with busuanzi.
 # Get more information on http://ibruce.info/2015/04/04/busuanzi/
