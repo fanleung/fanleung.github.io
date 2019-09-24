@@ -382,9 +382,9 @@ baidu_analytics: 87c290a085d2b8ca80e434c2c4f88d3b
   
 # Disqus
 disqus:
-  enable: true
+  enable: false
   shortname:
-  count: true
+  count: false
 
 reward_comment: 如果这篇文章能帮到您，欢迎您扫描下面二维码对我打赏，您的支持将鼓励我继续创作！
 wechatpay: "http://ww1.sinaimg.cn/large/7e61971fgy1g79ljdu5llj205u05agm4.jpg"
@@ -491,14 +491,8 @@ valine_comment:
   enable: true
   leancloud_appid: 8t0RzmS6J6rI60h1JDAeXeCa-gzGzoHsz
   leancloud_appkey: im5ytKGJxe5XwDy7CLj6CYIx
-  notify: false 
-  verify: false
   placeholder: "来都来了，不撩一句嘛~，留言记得留下【邮箱】，方便收到回复通知~"
-  avatar: mm 
-  guest_info: nick,mail,link 
-  pageSize: 10 
-  visitor: true 
-  comment_count: true
+  count: true
 
 
 # Show number of visitors to each article.
