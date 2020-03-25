@@ -1,0 +1,562 @@
+I"��<h3 id="第2章-处理文件摄像头和图形用户界面">第2章 处理文件、摄像头和图形用户界面</h3>
+
+<h4 id="211-读写图像文件">2.1.1 读/写图像文件</h4>
+<p>OpenCV 的<code class="highlighter-rouge">imread()</code>函数 和 <code class="highlighter-rouge">imwrite()</code>函数能够支持各种静态图像文件格式，都支持BMP,通常还支持PNG、JPEG 和 TIFF 格式</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 每个像素都有一个值，但不同格式表示像素的方式有所不同，例如通过二维 numpy 数组简单创建一个黑色的正方形
+# 每个像素值的范围是 0-255
+</span><span class="kn">import</span> <span class="nn">numpy</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="n">img</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[0, 0, 0],
+       [0, 0, 0],
+       [0, 0, 0]], dtype=uint8)
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 使用 cv2.cvtColor 函数将图像转换成 RGB 格式
+# 从结果可以看出，每个像素从之前一个值表示，变成由三元数组表示了，每个整型表示一个B, G, R通道
+# 其他色彩空间（如HSV）也以同样的方式来表示像素， 只是取值范围和通道数目不同，HSV是 0-180
+</span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_GRAY2BGR</span><span class="p">)</span>
+<span class="n">img</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>array([[[0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]],
+
+       [[0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]],
+
+       [[0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]]], dtype=uint8)
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 执行第一步得到的结果是（3，3）
+# 如果将图像转化为 BGR 格式，shape 会返回 （3,3,3），这表明每个像素存在三个通道
+</span><span class="n">img</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+<span class="n">img</span><span class="o">.</span><span class="n">shape</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_GRAY2BGR</span><span class="p">)</span>
+<span class="n">img</span><span class="o">.</span><span class="n">shape</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(3, 3, 3)
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">## 读取一种格式的图像文件 ，然后保存为另一种格式
+</span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s">'../fanleungTest/test.png'</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s">'../fanleungTest/test.jpg'</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>True
+</code></pre></div></div>
+
+<blockquote>
+  <p>在默认情况下，即时图像文件为灰度格式，<code class="highlighter-rouge">imread()</code> 函数也会返回 BGR 格式的图像，BGR 与 RGB 所表示的而是才空间相同，但字节顺序相反</p>
+</blockquote>
+
+<p>以下为 imread() 函数的可选参数</p>
+<ul>
+  <li>IMREAD_ANYCOLOR = 4</li>
+  <li>IMREAD_ANYDEPTH = 2</li>
+  <li>IMREAD_COLOR = 1</li>
+  <li>IMREAD_GRAYSCALE = 0</li>
+  <li>IMREAD_LOAD_GDAL = 8</li>
+  <li>IMREAD_UNCHANGED = -1</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">grayImage</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s">'../fanleungTest/test.png'</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s">'../fanleungTest/testGray.png'</span><span class="p">,</span> <span class="n">grayImage</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>True
+</code></pre></div></div>
+
+<p>无论采用何种模式，imread()函数会删除所有alpha 通道的信息（透明度）, imwrite()函数要求函数为BGR 格式或灰度格式，并且每个通道要有一定的位（bit），输出格式要支持这些通道，如 bmp 格式要求每个通道有 8 位， 而 PNG 允许每个通道有 8 位或 16 位</p>
+
+<h4 id="212-图像和原始字节之间的转换">2.1.2 图像和原始字节之间的转换</h4>
+<ul>
+  <li>一个 OpenCV 图像是 array 类型的二维或三维数组，8位灰度图像是一个含有字节值的二维数组，24 位的 BGR 图像是一个三维数组，可使用表达式访问这些值。</li>
+  <li>例如image[0,0] 和 image[0, 0, 0],第一个值代表像素的 y 坐标或行，0 表示顶部， 第二个值是像素的 x 坐标或者列，0 表示最左边， 第三个值表示颜色通道</li>
+  <li>对于一个左上角有白色像素的 8 位灰度图像而言，image[0, 0] = 255, 对于一个左上角有蓝色像素的 24 位 BGR 图像而言， image[0, 0] = [255, 0, 0]</li>
+</ul>
+
+<h5 id="将随机字节-bytearray-转化为-灰度图像-和-bgr-图像">将随机字节 bytearray 转化为 灰度图像 和 BGR 图像</h5>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="c1"># make an array of 120,000 random bytes
+#randomByteArray = bytearray(os.urandom(120000))
+</span><span class="n">randomByteArray</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">120000</span><span class="p">)</span>
+<span class="c1">#randomByteArray
+</span></code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">flatNumpyArray</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">randomByteArray</span><span class="p">)</span>
+<span class="c1">#flatNumpyArray
+</span></code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Convert the array to make a 400x300 grayscale image
+</span><span class="n">grayImage</span> <span class="o">=</span> <span class="n">flatNumpyArray</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s">'../fanleungTest/RandomGray.png'</span><span class="p">,</span> <span class="n">grayImage</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>True
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Convert the array to make a 400x300 color image
+</span><span class="n">bgrImage</span> <span class="o">=</span> <span class="n">flatNumpyArray</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="s">'../fanleungTest/RandomColor.png'</span><span class="p">,</span> <span class="n">bgrImage</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>True
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 制作数据也可以一句代码实现
+</span><span class="n">grayImage</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">120000</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="213-使用-numpyarray-访问图像数据">2.1.3 使用 numpy.array 访问图像数据</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 由于在jupyter notebook 中调用 cv2.imshow() 会奔溃，这里重构一下函数
+# 也可以使用 from matplotlib import pyplot as plt 来显示图片
+# plt.imshow(img)
+# plt.show()
+</span><span class="k">def</span> <span class="nf">cv2_imshow</span><span class="p">(</span><span class="n">img</span><span class="p">):</span>
+    <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s">'temp'</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
+    <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<h5 id="将-bgr-图像在-0-0处的像素转化为白色">将 BGR 图像在 (0, 0)处的像素转化为白色</h5>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s">'../fanleungTest/MyPic.png'</span><span class="p">)</span>
+<span class="n">img</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">]</span>
+<span class="n">cv2_imshow</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h5 id="将坐标-150-120-的当前蓝色值127改成-255">将坐标 (150, 120) 的当前蓝色值（127）改成 255</h5>
+<ul>
+  <li>numpy.array 提供的 item() 方法非常方便，该函数有三个参数：x,y,BGR的通道值：0是B，1是G, 2是R, 返回索引的值</li>
+  <li>itemset()函数可设置指定像素在指定通道的值，itemset()函数有两个参数：三元组（x,y,通道值）和要设置的值</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s">'../fanleungTest/MyPic.png'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>168
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">img</span><span class="o">.</span><span class="n">itemset</span><span class="p">((</span><span class="mi">150</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">255</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="n">cv2_imshow</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>255
+</code></pre></div></div>
+
+<blockquote>
+  <p>使用 numpy.array 的原因有两个numpy.array 经过优化，可读性强，这里不使用第一个示例的方式访问原始索引</p>
+</blockquote>
+
+<p>这种特殊的代码本身并不能完成多少功能，但它提供了一种解决方案。然而，建议使用内置的滤波器和方法来处理整个图像，上述方法只适合处理特定的小区域。</p>
+
+<blockquote>
+  <p>提示：通过循环来处理 python 的数据效率非常低，应尽量避免这种方式。使用数组索引可以高效地操作像素。像素操作是一个高代价的低效操作，视频处理要很久才能得到结果。可用索引（indexing）来解决这个额外难题，使用下面的代码可将图像所有的G(绿色)值设置为0</p>
+  <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import cv2
+import numpy as np
+img = cv2.imread('MyPic.png')
+img[:, :, 1] = 0
+</code></pre></div>  </div>
+</blockquote>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="c1"># from matplotlib import pyplot as plt
+</span><span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s">'../fanleungTest/MyPic.png'</span><span class="p">)</span>
+<span class="n">img</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">cv2_imshow</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<h5 id="感兴趣区域-region-of-interest-roi">感兴趣区域 （Region Of Interest, ROI）</h5>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s">'../fanleungTest/MyPic.png'</span><span class="p">)</span>
+<span class="n">my_roi</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">100</span><span class="p">]</span>
+<span class="n">img</span><span class="p">[</span><span class="mi">190</span><span class="p">:</span><span class="mi">290</span><span class="p">,</span> <span class="mi">190</span><span class="p">:</span><span class="mi">290</span><span class="p">]</span> <span class="o">=</span> <span class="n">my_roi</span>
+<span class="n">cv2_imshow</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span> 
+<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s">'../fanleungTest/MyPic.png'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(290, 290, 3)
+252300
+uint8
+</code></pre></div></div>
+
+<h5 id="这三个属性分别为">这三个属性分别为</h5>
+<ul>
+  <li>shape: 包括宽度、高度和通道数， 如果图像是单色或者灰度的，则不包含通道值</li>
+  <li>size: 图像像素大小</li>
+  <li>dtype: 图像的数据类型，一般为无符号整型，比如uint8</li>
+</ul>
+
+<h4 id="214-视频文件的读写">2.1.4 视频文件的读/写</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 将一幅图像传递给 videoWriter 的 write() 函数，该函数会将这个图像加载到VideoWrite()所指向的文件中
+# 读取 avi 文件的帧，并采用 YUV 颜色编码将其写入另一个帧中:
+# 把一个视频转化为另一个视频，即 MyInputVid 转化为 MyInputVid1,但是用不同的编码格式YUV
+</span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="n">videoCapture</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="s">'../fanleungTest/MyInputVid.avi'</span><span class="p">)</span>
+<span class="c1"># 读取这个视频的帧速
+</span><span class="n">fps</span> <span class="o">=</span> <span class="n">videoCapture</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FPS</span><span class="p">)</span>
+<span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">videoCapture</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_WIDTH</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="n">videoCapture</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_HEIGHT</span><span class="p">)))</span>
+<span class="n">videoWriter</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter</span><span class="p">(</span><span class="s">'../fanleungTest/MyInputVid_converse.avi'</span><span class="p">,</span>
+                             <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter_fourcc</span><span class="p">(</span><span class="s">'I'</span><span class="p">,</span> <span class="s">'4'</span><span class="p">,</span> <span class="s">'2'</span><span class="p">,</span> <span class="s">'0'</span><span class="p">),</span>
+                             <span class="n">fps</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+<span class="n">success</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">videoCapture</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="k">while</span> <span class="n">success</span><span class="p">:</span>
+    <span class="n">videoWriter</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+    <span class="n">success</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">videoCapture</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    
+    
+</code></pre></div></div>
+
+<p>注意： 必须要为VideoWriter类构建函数指定视频文件名，这个文件名对应的文件若存在，就会被覆盖。也必须指定视频编码解码器。编码解码器的可用性根据系统不同而不同，下面是一些常用选项：</p>
+
+<ul>
+  <li>cv2.VideoWriter_fourcc（’I’，’4’，’2’，’0’）：该选项是一个未压缩的YUV颜色编码，是4:2:0色度子采样。这种编码有很好的兼容性，但会产生较大文件，文件扩展名为.avi</li>
+  <li>cv2.VideoWriter_fourcc（’P’，’I’，’M’，’1’）：该选项是MPEG-1编码类型，文件扩展名为.avi</li>
+  <li>cv2.VideoWriter_fourcc（’X’，’V’，’I’，’D’）：该选项是MPEG-4编码类型，如果希望得到的视频大小为平均值，推荐使用此选项，文件扩展名为.avi</li>
+  <li>cv2.VideoWriter_fourcc（’T’，’H’，’E’，’O’）：该选项是Ogg Vorbis，文件扩展名应为.ogv</li>
+  <li>cv2.VideoWriter_fourcc（’F’，’L’，’V’，’1’）：该选项是一个Flash视频，文件扩展名应为.flv</li>
+</ul>
+
+<p>帧速率和帧大小也必须要指定，因为需要从另一个视频文件复制视频帧，这些属性可以通过VideoCapture类的get()函数得到。</p>
+
+<h4 id="215-捕获摄像头的帧">2.1.5 捕获摄像头的帧</h4>
+<p>VideoCapture 类可以获取摄像头的帧流，但对摄像头而言，通常不是用视频的文件名来构建 VideoCapture 类，而是需要传递摄像头的设备索引（device index）<strong>(一个是视频文件，一个是摄像头)</strong></p>
+
+<h4 id="捕获摄像头-10-秒的视频信息并写入-myoutputvidavi">捕获摄像头 10 秒的视频信息，并写入 MyOutputVid.avi</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="n">cameraCapture</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">fps</span> <span class="o">=</span> <span class="mi">30</span> <span class="c1"># an assumption
+</span><span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">cameraCapture</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_WIDTH</span><span class="p">)),</span>
+        <span class="nb">int</span><span class="p">(</span><span class="n">cameraCapture</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_HEIGHT</span><span class="p">)))</span>
+<span class="n">videoWriter</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter</span><span class="p">(</span><span class="s">'../fanleungTest/MyOutputVid.avi'</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter_fourcc</span><span class="p">(</span><span class="s">'I'</span><span class="p">,</span> <span class="s">'4'</span><span class="p">,</span> <span class="s">'2'</span><span class="p">,</span> <span class="s">'0'</span><span class="p">),</span>
+                             <span class="n">fps</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+<span class="n">success</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">cameraCapture</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">numFrameRemaining</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">fps</span> <span class="o">-</span> <span class="mi">1</span>
+<span class="k">while</span> <span class="n">success</span> <span class="ow">and</span> <span class="n">numFrameRemaining</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">videoWriter</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+    <span class="n">success</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">cameraCapture</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="n">numFrameRemaining</span> <span class="o">-=</span> <span class="mi">1</span>
+<span class="n">cameraCapture</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<p>然而， VideoCapture.get() 方法不能返回摄像头帧速率的准确值，它总是返回 0, 于是只能假设一个帧速，或者用一个定时器来测量，这种办法会更好一些</p>
+
+<h4 id="一组摄像头或一个多头摄像头">一组摄像头或一个多头摄像头</h4>
+<p>read() 方法不再适合了，可用grab()和retrive()方法替代它</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>success0 = cameraCapture0.grab()
+success1 = cameraCapture1.grab()
+if success0 and success1:
+    frame0 = cameraCapture0.retrive()
+    frame1 = cameraCapture1.retrive()
+</code></pre></div></div>
+
+<h4 id="216-在窗口显示图像">2.1.6 在窗口显示图像</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s">'../fanleungTest/test.jpg'</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s">'my image'</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">()</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>调用destroyAllWindows()函数可以释放由OpenCV创建的所有窗口</p>
+
+<h4 id="217-在窗口显示摄像头帧">2.1.7 在窗口显示摄像头帧</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 通过 setMouseCallback() 函数来获取鼠标输入，实时显示摄像头帧
+</span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="n">clicked</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="k">def</span> <span class="nf">onMouse</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">clicked</span>
+    <span class="k">if</span> <span class="n">event</span> <span class="o">==</span> <span class="n">cv2</span><span class="o">.</span><span class="n">EVENT_LBUTTONUP</span><span class="p">:</span>
+        <span class="n">clicked</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="n">cameraCapture</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">namedWindow</span><span class="p">(</span><span class="s">'MyWindow'</span><span class="p">)</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">setMouseCallback</span><span class="p">(</span><span class="s">'MyWindow'</span><span class="p">,</span> <span class="n">onMouse</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">'showing camera feed. click window or press any key to stop'</span><span class="p">)</span>
+
+<span class="n">success</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">cameraCapture</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="k">while</span> <span class="n">success</span> <span class="ow">and</span> <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">clicked</span><span class="p">:</span>
+    <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="s">'Mywindow'</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span>
+    <span class="n">success</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">cameraCapture</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="n">cv2</span><span class="o">.</span><span class="n">destroyWindow</span><span class="p">(</span><span class="s">'MyWindow'</span><span class="p">)</span>
+<span class="n">cameraCapture</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>showing camera feed. click window or press any key to stop
+</code></pre></div></div>
+
+<h3 id="22-cameo-项目人脸跟踪和图像处理">2.2 Cameo 项目（人脸跟踪和图像处理）</h3>
+
+<h3 id="23-cameo--面向对象的设计">2.3 Cameo – 面向对象的设计</h3>
+<p>2.3.1 使用 managers.CaptureManager 提取视频流</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># managers.py
+</span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+
+<span class="k">class</span> <span class="nc">CaptureManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capture</span><span class="p">,</span> <span class="n">previewWindowManager</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                 <span class="n">shouldMirrorPreview</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">previewWindowManager</span> <span class="o">=</span> <span class="n">previewWindowManager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shouldMirrorPreview</span> <span class="o">=</span> <span class="n">shouldMirrorPreview</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_capture</span> <span class="o">=</span> <span class="n">capture</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_channel</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enteredFrame</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_imageFilename</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_videoFilename</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_videoEncoding</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_videoWriter</span> <span class="o">=</span> <span class="bp">None</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_startTime</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_framesElapsed</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fpsEstimate</span> <span class="o">=</span> <span class="bp">None</span>
+    
+    <span class="o">@</span><span class="nb">property</span>
+    <span class="k">def</span> <span class="nf">channel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_channel</span>
+    
+    <span class="o">@</span><span class="n">channel</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_channel</span> <span class="o">!=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_channel</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span> <span class="o">=</span> <span class="bp">None</span>
+    
+    <span class="o">@</span><span class="nb">property</span>
+    <span class="k">def</span> <span class="nf">frame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enteredFrame</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c1"># As of OpenCV 3.0, VideoCapture.retrieve() no longer supports
+</span>            <span class="c1"># the channel argument.
+</span>            <span class="c1"># _, self._frame = self._capture.retrieve(channel = self.channel)
+</span>            <span class="n">_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_capture</span><span class="o">.</span><span class="n">retrieve</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span>
+    
+    <span class="o">@</span><span class="nb">property</span>
+    <span class="k">def</span> <span class="nf">isWritingImage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imageFilename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+    
+    <span class="o">@</span><span class="nb">property</span>
+    <span class="k">def</span> <span class="nf">isWritingVideo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_videoFilename</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+    
+    <span class="k">def</span> <span class="nf">enterFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""Capture the next frame, if any."""</span>
+        
+        <span class="c1"># But first, check that any previous frame was exited.
+</span>        <span class="k">assert</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enteredFrame</span><span class="p">,</span> \
+            <span class="s">'previous enterFrame() had no matching exitFrame()'</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_capture</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_enteredFrame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_capture</span><span class="o">.</span><span class="n">grab</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">exitFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""Draw to the window. Write to files. Release the frame."""</span>
+        
+        <span class="c1"># Check whether any grabbed frame is retrievable.
+</span>        <span class="c1"># The getter may retrieve and cache the frame.
+</span>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_enteredFrame</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">return</span>
+        
+        <span class="c1"># Update the FPS estimate and related variables.
+</span>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_framesElapsed</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">timeElapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_startTime</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_fpsEstimate</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">_framesElapsed</span> <span class="o">/</span> <span class="n">timeElapsed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_framesElapsed</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="c1"># Draw to the window, if any.
+</span>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">previewWindowManager</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shouldMirrorPreview</span><span class="p">:</span>
+                <span class="n">mirroredFrame</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">fliplr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">previewWindowManager</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">mirroredFrame</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">previewWindowManager</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame</span><span class="p">)</span>
+        
+        <span class="c1"># Write to the image file, if any.
+</span>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isWritingImage</span><span class="p">:</span>
+            <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_imageFilename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_imageFilename</span> <span class="o">=</span> <span class="bp">None</span>
+        
+        <span class="c1"># Write to the video file, if any.
+</span>        <span class="bp">self</span><span class="o">.</span><span class="n">_writeVideoFrame</span><span class="p">()</span>
+        
+        <span class="c1"># Release the frame.
+</span>        <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_enteredFrame</span> <span class="o">=</span> <span class="bp">False</span>
+    
+    <span class="k">def</span> <span class="nf">writeImage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="s">"""Write the next exited frame to an image file."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_imageFilename</span> <span class="o">=</span> <span class="n">filename</span>
+    
+    <span class="k">def</span> <span class="nf">startWritingVideo</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span>
+            <span class="n">encoding</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter_fourcc</span><span class="p">(</span><span class="s">'M'</span><span class="p">,</span><span class="s">'J'</span><span class="p">,</span><span class="s">'P'</span><span class="p">,</span><span class="s">'G'</span><span class="p">)):</span>
+        <span class="s">"""Start writing exited frames to a video file."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_videoFilename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_videoEncoding</span> <span class="o">=</span> <span class="n">encoding</span>
+    
+    <span class="k">def</span> <span class="nf">stopWritingVideo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""Stop writing exited frames to a video file."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_videoFilename</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_videoEncoding</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_videoWriter</span> <span class="o">=</span> <span class="bp">None</span>
+    
+    <span class="k">def</span> <span class="nf">_writeVideoFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">isWritingVideo</span><span class="p">:</span>
+            <span class="k">return</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_videoWriter</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">fps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_capture</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FPS</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">fps</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="c1"># The capture's FPS is unknown so use an estimate.
+</span>                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_framesElapsed</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
+                    <span class="c1"># Wait until more frames elapse so that the
+</span>                    <span class="c1"># estimate is more stable.
+</span>                    <span class="k">return</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">fps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fpsEstimate</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_capture</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                        <span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_WIDTH</span><span class="p">)),</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_capture</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                        <span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_HEIGHT</span><span class="p">)))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_videoWriter</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_videoFilename</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_videoEncoding</span><span class="p">,</span>
+                <span class="n">fps</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_videoWriter</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">WindowManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">windowName</span><span class="p">,</span> <span class="n">keypressCallback</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keypressCallback</span> <span class="o">=</span> <span class="n">keypressCallback</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_windowName</span> <span class="o">=</span> <span class="n">windowName</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_isWindowCreated</span> <span class="o">=</span> <span class="bp">False</span>
+    
+    <span class="o">@</span><span class="nb">property</span>
+    <span class="k">def</span> <span class="nf">isWindowCreated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isWindowCreated</span>
+    
+    <span class="k">def</span> <span class="nf">createWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">namedWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_windowName</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_isWindowCreated</span> <span class="o">=</span> <span class="bp">True</span>
+    
+    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_windowName</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">destroyWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">destroyWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_windowName</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_isWindowCreated</span> <span class="o">=</span> <span class="bp">False</span>
+    
+    <span class="k">def</span> <span class="nf">processEvents</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">keycode</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">keypressCallback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">keycode</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># Discard any non-ASCII info encoded by GTK.
+</span>            <span class="n">keycode</span> <span class="o">&amp;=</span> <span class="mh">0xFF</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">keypressCallback</span><span class="p">(</span><span class="n">keycode</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># cameo.py
+</span>
+<span class="c1"># 先运行上面的 managers.py
+# 现在已经有一个能显示摄像头帧，监听键盘输入以及截图或录屏的应用了
+</span><span class="kn">import</span> <span class="nn">cv2</span>
+
+<span class="k">class</span> <span class="nc">Cameo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="c1"># 初始化 CaptureManager 类时， shouldMirrorPreview 为True, 导致摄像头被镜像，但是截图和录屏不会镜像
+</span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_windowManager</span> <span class="o">=</span> <span class="n">WindowManager</span><span class="p">(</span><span class="s">'Cameo'</span><span class="p">,</span>
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">onKeypress</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_captureManager</span> <span class="o">=</span> <span class="n">CaptureManager</span><span class="p">(</span>
+            <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_windowManager</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""Run the main loop."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_windowManager</span><span class="o">.</span><span class="n">createWindow</span><span class="p">()</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_windowManager</span><span class="o">.</span><span class="n">isWindowCreated</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_captureManager</span><span class="o">.</span><span class="n">enterFrame</span><span class="p">()</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_captureManager</span><span class="o">.</span><span class="n">frame</span>
+            
+            <span class="k">if</span> <span class="n">frame</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="c1"># TODO: Filter the frame (Chapter 3).
+</span>                <span class="k">pass</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">_captureManager</span><span class="o">.</span><span class="n">exitFrame</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_windowManager</span><span class="o">.</span><span class="n">processEvents</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">onKeypress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keycode</span><span class="p">):</span>
+        <span class="s">"""Handle a keypress.
+        
+        space  -&gt; Take a screenshot.
+        tab    -&gt; Start/stop recording a screencast.
+        escape -&gt; Quit.
+        
+        """</span>
+        <span class="k">if</span> <span class="n">keycode</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span> <span class="c1"># space
+</span>            <span class="bp">self</span><span class="o">.</span><span class="n">_captureManager</span><span class="o">.</span><span class="n">writeImage</span><span class="p">(</span><span class="s">'../fanleungTest/screenshot.png'</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">keycode</span> <span class="o">==</span> <span class="mi">9</span><span class="p">:</span> <span class="c1"># tab
+</span>            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_captureManager</span><span class="o">.</span><span class="n">isWritingVideo</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_captureManager</span><span class="o">.</span><span class="n">startWritingVideo</span><span class="p">(</span>
+                    <span class="s">'../fanleungTest/screencast.avi'</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_captureManager</span><span class="o">.</span><span class="n">stopWritingVideo</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">keycode</span> <span class="o">==</span> <span class="mi">27</span><span class="p">:</span> <span class="c1"># escape
+</span>            <span class="bp">self</span><span class="o">.</span><span class="n">_windowManager</span><span class="o">.</span><span class="n">destroyWindow</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">__name__</span><span class="o">==</span><span class="s">"__main__"</span><span class="p">:</span>
+    <span class="n">Cameo</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div></div>
+
+:ET
